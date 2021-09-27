@@ -3,6 +3,7 @@ import  threading
 from threading import Semaphore, Thread
 import time
 from Clases import  Oferta
+
 portEmp = "5000"
 portServ = "6000"
 host = "25.86.45.96"

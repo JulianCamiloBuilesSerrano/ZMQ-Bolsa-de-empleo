@@ -32,7 +32,6 @@ def crearOferta():
     titulo = str(input("indiquie el titulo de la nueva oferta: "))
     descripcion = str(input("Descripcion de la oferta: "))
     experiencia = str(input("Años de experiencia requerida: "))
-    descripcion = str(input("Descripcion de la oferta: "))
     estudio = str(input("Estudio basico requerido: "))
     termina = False
     habilidades = []
