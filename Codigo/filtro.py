@@ -6,7 +6,8 @@ from Clases import  Oferta
 
 portEmp = "5000"
 portServ = "6000"
-host = "25.86.45.96"
+host = "25.86.45.96" 
+host2 = "25.8.248.34"   #Filtro suscrito
 
 context = zmq.Context()
 socketSub =  context.socket(zmq.SUB)
@@ -14,7 +15,7 @@ socketServer =  context.socket(zmq.REQ)
 
 socketServer.connect("tcp://{}:{}".format(host,portServ))
 
-socketSub.connect("tcp://{}:{}".format(host,portEmp))
+socketSub.connect("tcp://{}:{}".format(host2,portEmp))
 
 #semafor encargado para poder hacer uso de la lista de Ofertas enviadas por los Empleadores
 semaforo = Semaphore(1)

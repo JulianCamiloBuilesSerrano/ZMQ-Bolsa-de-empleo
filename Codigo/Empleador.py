@@ -15,7 +15,7 @@ context = zmq.Context()
 # --------------------------------------------------
 socketPub = context.socket(zmq.PUB)
 #socketSub = context.socket(zmq.SUB)
-socketPub.bind("tcp://25.86.45.96:{}".format(portPub))
+socketPub.bind("tcp://25.8.248.34:{}".format(portPub))
 
 # ------------------------------------
 #     crear subscripción

@@ -55,7 +55,7 @@ class HiloAlamcenarenDHT(Thread):
 def insertarOfertas():
     while True:
         obj = socketfilter.recv_pyobj()
-        
+        print("llega objeto del filtro")
         socketfilter.send_string("Check")
         HiloAlamcenarenDHT(semaforo,obj).start()
 
