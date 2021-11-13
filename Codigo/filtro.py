@@ -62,6 +62,7 @@ def recibirOferta():
     while True:
         print("esperando Oferta")
         ofer = socketSub.recv_pyobj()
+        print("pasa oferta")
         HiloEmpleador(semaforo,ofer).start()
         HiloServidorEnviar(semaforo).start()
     #end while
