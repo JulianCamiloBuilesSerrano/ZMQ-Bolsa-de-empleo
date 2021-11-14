@@ -57,23 +57,25 @@ class HiloServidorEnviar(Thread):
                     print("No hay servidores disponibles")
                     break
     def guardarOferta(self, oferta,ip):
-        self.socketServer.connect("tcp://"+ip+":6000")
-        self.socketServer.send_pyobj(oferta)
+        socketServer =  context.socket(zmq.REQ)
+
+        print("ENTRA" + "tcp://"+ip+":6000")
+        socketServer.connect("tcp://"+ip+":6000")
+        socketServer.send_pyobj(oferta)
         k = 0
         end = False
         while not end and k < 10:
-            if self.socketServer.poll(3000) and zmq.POLLIN:
-                        res = self.socketServer.recv_string()
+            if socketServer.poll(150) and zmq.POLLIN:
+                        res = socketServer.recv_string()
                         print(res)
                         end = True
             k = k + 1
-        self.socketServer.disconnect("tcp://"+ip+":6000")
+        socketServer.disconnect("tcp://"+ip+":6000")
         return end
             
         
     def run(self): #Metodo que se ejecutara con la llamada start
-        self.socketServer =  context.socket(zmq.REQ)
-        self.socketServer.connect("tcp://25.86.45.96:6000")
+        #self.socketServer.connect("tcp://25.86.45.96:6000")
         self.semaforo.acquire()
         self.enviarOFertas()
         self.semaforo.release()
