@@ -15,7 +15,7 @@ context = zmq.Context()
 # --------------------------------------------------
 socketPub = context.socket(zmq.PUB)
 #socketSub = context.socket(zmq.SUB)
-socketPub.bind("tcp://25.8.248.34:{}".format(portPub))
+socketPub.bind("tcp://25.86.45.96:{}".format(portPub))
 
 # ------------------------------------
 #     crear subscripción
@@ -26,7 +26,35 @@ socketPub.bind("tcp://25.8.248.34:{}".format(portPub))
 
 # menu para que el empleador inserte nuevos datos
 
-
+# def leerOFertas():
+#     f = open("ofertas.txt")
+#     i = 0
+#     titulo:str
+#     descripcion:str
+#     experiencia:str
+#     estudio = []
+#     habilidades = []
+#     while True:
+#         l = f.readline()
+#         if i == 0 :
+#             titulo=l
+#         elif i ==  1:
+#             descripcion = l
+#         elif i == 2:
+#             experiencia = l
+#         elif i == 3:
+#             estudio = l
+#         elif i == 4:
+#             habilidades = l
+#         if not l:
+#             break
+#         if i == 4:
+#             i = 0
+#             o = Oferta(titulo, descripcion, experiencia, estudio, habilidades)
+#             print(o)
+#             socketPub.send_pyobj("hola")
+#         else:
+#             i += 1
 def crearOferta():
     idEmple = str(input("inidque el id del empleador: "))
     titulo = str(input("indiquie el titulo de la nueva oferta: "))
@@ -55,9 +83,9 @@ def crearOferta():
         sector = "Ciencia"
     elif  sel == 5:
         sector = "Docencia"
-    return Oferta(idEmple, 0, titulo, descripcion, experiencia, estudio, habilidades,sector)
+    return Oferta( titulo, descripcion, experiencia, estudio, habilidades)
 
-
+#leerOFertas()
 fin = False
 while not fin:
     print("----------Menu de Empleador-------")
