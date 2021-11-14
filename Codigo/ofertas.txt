@@ -8,8 +8,13 @@ asisitir en la parte operativa de la empresa
 1
 ingenieria de sistemas
 c++,python,r,git,linux
-meidico cirujano 
+medico cirujano 
 hacer cirugias 
 2
-meidicina
+medicina
 instrumentos de cirugia, manejo de personas
+arquitecto de casas 
+diseñar muchas casas 
+3
+arquitectura
+autocad, dibujo tecnico

@@ -99,7 +99,31 @@ def actualizacionDHT():
         semaforo.release()
         print(p)
 
+def informarEstado():
+    socketEstado = context.socket(zmq.REP)
+    socketEstado.bind("tcp://{}:{}".format(hostPincipal,"2000"))
+    while True:
+        res = socketEstado.recv_string()
+        if res == "activo?":
+            socketEstado.send_string(hostPincipal)
+        else:
+            socketEstado.send_string("invalido")
+def enviarOfertas():
+    socketEn = context.socket(zmq.REP)
+    socketEn.bind("tcp://{}:{}".format(hostPincipal,"3000"))
+    while True:
+        res = socketEn.recv_string()
+        print("llega")
+        if  res == "ofertas":
+            semaforo.acquire()
+            socketEn.send_pyobj(DHT)
+            semaforo.release()
+
 hiloFiltro = Thread(target=insertarOfertas)
 hiloFiltro.start()
 hiloActualizar = Thread(target=actualizacionDHT)
 hiloActualizar.start()
+hiloEstado = Thread(target=informarEstado)
+hiloEstado.start()
+hiloEnviar = Thread(target=enviarOfertas)
+hiloEnviar.start()

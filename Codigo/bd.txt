@@ -1,0 +1,15 @@
+mineria de datos 
+asisitir en la parte de datos 
+2
+ingenieria de sistemas
+c++,python,r
+ingenierio devops 
+asisitir en la parte operativa de la empresa
+1
+ingenieria de sistemas
+c++,python,r,git,linux
+arquitecto de casas 
+diseñar muchas casas 
+3
+arquitectura
+autocad, dibujo tecnico
