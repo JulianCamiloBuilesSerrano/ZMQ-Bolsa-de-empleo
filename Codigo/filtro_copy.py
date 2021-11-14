@@ -61,7 +61,7 @@ class HiloServidorEnviar(Thread):
                 print("Oferta : ")
                 print(i)
                 socketServer.send_pyobj(i)
-                print(socketServer.recv_string())
+                #print(socketServer.recv_string())
             
     def run(self): #Metodo que se ejecutara con la llamada start
           self.semaforo.acquire()
@@ -77,6 +77,7 @@ class HiloObtenerOfertas(Thread):
          self.semaforo  = semaforo
     def insertar_oferta(self,ob):
         listOfertas.add(ob)
+        print(listOfertas)
     def run(self): #Metodo que se ejecutara con la llamada start
         socket =  context.socket(zmq.SUB)
         conexion = "tcp://"+self.ip+":"+self.puerto
@@ -89,7 +90,7 @@ class HiloObtenerOfertas(Thread):
             self.semaforo.acquire()
             self.insertar_oferta(ob)
             self.semaforo.release()
-            HiloServidorEnviar(self.semaforo).start()
+            #HiloServidorEnviar(self.semaforo).start()
             print("Se ha insertado una oferta ")
             
 HiloObtenerOfertas("25.86.45.96","5000",semaforo).start()
