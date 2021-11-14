@@ -67,6 +67,7 @@ class HiloServidorEnviar(Thread):
                         print(res)
                         end = True
             k = k + 1
+        self.socketServer.disconnect("tcp://"+ip+":6000")
         return end
             
         
@@ -94,7 +95,7 @@ class HiloObtenerOfertas(Thread):
         elif "instrumento"in ob.descripcion or "musica"in ob.estudio:
             ob.setSector("Musica")
         elif "banda"in ob.descripcion or "conciertos"in ob.descripcion:
-            ob.setSector("salud")
+            ob.setSector("Musica")
         elif "politica"in ob.descripcion or "derecho"in ob.estudio:
             ob.setSector("Politica")
         elif "civil"in ob.descripcion or "senado"in ob.descripcion:
