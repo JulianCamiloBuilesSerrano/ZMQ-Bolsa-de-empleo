@@ -1,8 +1,12 @@
 import zmq
-
 from threading import Semaphore, Thread
 import time
 from Clases import  Oferta
+
+#--------------------------
+#leer la ip de donse se esta iniciando el proceso 
+#--------------------------
+hostPincipal = str(input("insique la ip"))
 
 portEmp = "5000"
 portServ = "6000"
@@ -10,9 +14,15 @@ host = "25.86.45.96"
 host2 = "25.86.45.96"   #Filtro suscrito
 
 context = zmq.Context()
+#-------------------------
+#se establece el contexto subscriptor para saber la informacion de la
+#comunicacion los empleadores
+#-------------------------
 socketSub =  context.socket(zmq.SUB)
+#-------------------------
+#se establece el contexto request replay para saber la comunicación
+#comunicacion el servidor
 socketServer =  context.socket(zmq.REQ)
-
 socketServer.connect("tcp://{}:{}".format(host,portServ))
 
 socketSub.connect("tcp://{}:{}".format(host2,portEmp))

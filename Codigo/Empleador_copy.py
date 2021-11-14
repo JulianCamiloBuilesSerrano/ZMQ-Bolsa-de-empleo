@@ -17,7 +17,7 @@ context = zmq.Context()
 # --------------------------------------------------
 socketPub = context.socket(zmq.PUB)
 #socketSub = context.socket(zmq.SUB)
-socketPub.bind("tcp://*:{}".format(portPub))
+socketPub.bind("tcp://25.86.45.96:{}".format(portPub))
 
 # ------------------------------------
 #     crear subscripción
@@ -56,8 +56,9 @@ while True:
         print(o)
     else:
         i += 1
-time.sleep(1)
+
 for i in lista:
+    time.sleep(2)
     socketPub.send_pyobj(i)
 
 semaforo = Semaphore(1)
