@@ -8,7 +8,7 @@ asisitir en la parte operativa de la empresa
 1
 ingenieria de sistemas
 c++,python,r,git,linux
-meidoco cirujano 
+meidico cirujano 
 hacer cirugias 
 2
 meidicina

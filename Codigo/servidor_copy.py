@@ -1,4 +1,5 @@
 from ctypes import resize
+from os import write
 import zmq
 from Clases import  *
 from threading import Semaphore, Thread
@@ -25,7 +26,7 @@ semaforo = Semaphore(1)
 
 valorHash = 0
 class DHTCompartir(Thread):
-    def __init__(self,ip,puerto): #Constructor de la clase
+    def __init__(self,ip,puerto,semaforo): #Constructor de la clase
          Thread.__init__(self)
          self.ip = ip
          self.puerto = puerto
@@ -48,8 +49,17 @@ class HiloAlamcenarenDHT(Thread):
         n = len(DHT)
         ID = n+1
         DHT[str(n)] = self.oferta
-        with open('Ofertas.pkl','wb') as output:
-            pickle.dump(self.oferta,output,pickle.HIGHEST_PROTOCOL)
+        # with open('Ofertas.pkl','wb') as output:
+        #     pickle.dump(self.oferta,output,pickle.HIGHEST_PROTOCOL)
+        print(self.oferta)
+        f = open("bd.txt","a")
+        #f.write(self.oferta.ip)
+        f.write(self.oferta.titulo)
+        f.write(self.oferta.descripcion)
+        f.write(self.oferta.experiencia)
+        f.write(self.oferta.estudio)
+        f.write(self.oferta.habilidades)
+        f.close()
     def run(self): #Metodo que se ejecutara con la llamada start
         self.semaforo.acquire()
         self.alamcenarOfertas()

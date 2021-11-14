@@ -14,23 +14,11 @@ host = "25.86.45.96"
 host2 = "25.86.45.96"   #Filtro suscrito
 
 context = zmq.Context()
-#-------------------------
-#se establece el contexto subscriptor para saber la informacion de la
-#comunicacion los empleadores
-#-------------------------
-socketSub =  context.socket(zmq.SUB)
-#-------------------------
-#se establece el contexto request replay para saber la comunicación
-#comunicacion el servidor
-socketServer =  context.socket(zmq.REQ)
-socketServer.connect("tcp://{}:{}".format(host,portServ))
 
-socketSub.connect("tcp://{}:{}".format(host2,portEmp))
 
 #semafor encargado para poder hacer uso de la lista de Ofertas enviadas por los Empleadores
 semaforo = Semaphore(1)
 
-socketSub.subscribe("")
 
 listOfertas= set()
 #-----------------------------------------------------------------
@@ -55,39 +43,35 @@ class HiloServidorEnviar(Thread):
          Thread.__init__(self)
          self.semaforo = semaforo
     def enviarOFertas(self):
-        if len(listOfertas) >= 10:
+        if len(listOfertas) >= 3:
             for i in listOfertas:
                 print("Oferta : ")
                 print(i)
                 self.socketServer.send_pyobj(i)
-                i = 0
-                while True:
-                    if socketServer.poll(1000) and zmq.POLLIN:
-                        res = socketServer.recv_string()
+                k = 0
+                end = False
+                while not end:
+                    if self.socketServer.poll(3000) and zmq.POLLIN:
+                        res = self.socketServer.recv_string()
                         print(res)
-                        return
-                    if i == 3 :
+                        end = True
+                    elif k == 10 and hostPincipal != "25.8.248.34":
                         self.socketServer.connect("tcp://25.8.248.34:6000")
                         self.socketServer.send_pyobj(i)
-                    elif i == 7:
+                    elif k == 20 and hostPincipal != "25.86.45.96":
                         self.socketServer.connect("tcp://25.86.45.96:6000")
                         self.socketServer.send_pyobj(i)
-                    elif i == 9:
+                    elif k == 30 and hostPincipal != "25.5.97.125":
                         self.socketServer.connect("tcp://25.5.97.125:6000")
                         self.socketServer.send_pyobj(i)
-                    elif i > 10:
+                    elif k == 31:
                         print("No hay servidores disponibles")
                         return
-                    i = i + 1
+                    k = k + 1
         
     def run(self): #Metodo que se ejecutara con la llamada start
         self.socketServer =  context.socket(zmq.REQ)
-        if hostPincipal == "25.86.45.96":
-            self.socketServer.connect("tcp://25.8.248.34:6000")
-        elif hostPincipal == "25.8.248.34":
-            self.socketServer.connect("tcp://25.8.248.34:6000")
-        else :
-            self.socketServer.connect("tcp://25.86.45.96:6000")
+        self.socketServer.connect("tcp://25.86.45.96:6000")
         self.semaforo.acquire()
         self.enviarOFertas()
         self.semaforo.release()
@@ -120,6 +104,7 @@ class HiloObtenerOfertas(Thread):
             ob.setSector("Arquitectura y diseño")
         elif "diseño"in ob.estudio or "arquitectura"in ob.estudio:
             ob.setSector("Arquitectura y diseño")
+        print(ob)
         listOfertas.add(ob)
         print(listOfertas)
     def run(self): #Metodo que se ejecutara con la llamada start
