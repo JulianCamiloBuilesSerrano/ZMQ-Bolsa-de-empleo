@@ -79,7 +79,7 @@ def insertarOfertas():
     while True:
         obj = socketfilter.recv_pyobj()
         print("llega objeto del filtro")
-        socketfilter.send_string("Check, objeto en el servidor")
+        socketfilter.send_string("Check, objeto en el servidor " +hostPincipal)
         HiloAlamcenarenDHT(semaforo,obj).start()
 def actualizacionDHT():
     while True:
@@ -89,3 +89,5 @@ def actualizacionDHT():
 
 hiloFiltro = Thread(target=insertarOfertas)
 hiloFiltro.start()
+hiloActualizar = Thread(target=actualizacionDHT)
+hiloActualizar.start()
