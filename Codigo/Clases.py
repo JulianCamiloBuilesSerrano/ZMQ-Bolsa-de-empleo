@@ -1,7 +1,7 @@
 class Oferta():
-    def __init__(self,titulo,descripcion,experiencia,estudio, habilidades):
+    def __init__(self,titulo,descripcion,experiencia,estudio, habilidades,ip):
 
-        self.ID  = None
+        self.ip  = None
         self.titulo = titulo
         self.descripcion = descripcion
         self.experiencia = experiencia

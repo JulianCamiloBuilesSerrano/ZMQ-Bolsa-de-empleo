@@ -2,7 +2,10 @@ import zmq
 from Clases import Oferta
 from threading import Semaphore, Thread
 import  time
-
+#--------------------------
+#leer la ip de donse se esta iniciando el proceso 
+#--------------------------
+hostPincipal = str(input("Indique la ip: "))
 # --------------------------------------------------
 #   Establecimiento del pueto de conexion
 # --------------------------------------------------
@@ -17,13 +20,10 @@ context = zmq.Context()
 # --------------------------------------------------
 socketPub = context.socket(zmq.PUB)
 #socketSub = context.socket(zmq.SUB)
-socketPub.bind("tcp://25.86.45.96:{}".format(portPub))
-
+socketPub.bind("tcp://{}:{}".format(hostPincipal,portPub))
 # ------------------------------------
 #     crear subscripción
 # ------------------------------------
-
-
 # agregar el nombre
 
 # menu para que el empleador inserte nuevos datos
@@ -51,7 +51,7 @@ while True:
         break
     if i == 4:
         i = 0
-        o = Oferta(titulo, descripcion, experiencia, estudio, habilidades)
+        o = Oferta(titulo, descripcion, experiencia, estudio, habilidades,hostPincipal)
         lista.append(o)
         print(o)
     else:

@@ -6,7 +6,7 @@ from Clases import  Oferta
 #--------------------------
 #leer la ip de donse se esta iniciando el proceso 
 #--------------------------
-hostPincipal = str(input("insique la ip"))
+hostPincipal = str(input("Indique la ip: "))
 
 portEmp = "5000"
 portServ = "6000"
@@ -32,7 +32,7 @@ semaforo = Semaphore(1)
 
 socketSub.subscribe("")
 
-listOfertas = set()
+listOfertas= set()
 #-----------------------------------------------------------------
 class HiloEmpleador(Thread):
     # este hilo se encarga de agregar cada oferta a 
@@ -54,19 +54,43 @@ class HiloServidorEnviar(Thread):
     def __init__(self,semaforo): #Constructor de la clase
          Thread.__init__(self)
          self.semaforo = semaforo
-
     def enviarOFertas(self):
-        if len(listOfertas) >= 2:
+        if len(listOfertas) >= 10:
             for i in listOfertas:
                 print("Oferta : ")
                 print(i)
-                socketServer.send_pyobj(i)
-                #print(socketServer.recv_string())
-            
+                self.socketServer.send_pyobj(i)
+                i = 0
+                while True:
+                    if socketServer.poll(1000) and zmq.POLLIN:
+                        res = socketServer.recv_string()
+                        print(res)
+                        return
+                    if i == 3 :
+                        self.socketServer.connect("tcp://25.8.248.34:6000")
+                        self.socketServer.send_pyobj(i)
+                    elif i == 7:
+                        self.socketServer.connect("tcp://25.86.45.96:6000")
+                        self.socketServer.send_pyobj(i)
+                    elif i == 9:
+                        self.socketServer.connect("tcp://25.5.97.125:6000")
+                        self.socketServer.send_pyobj(i)
+                    elif i > 10:
+                        print("No hay servidores disponibles")
+                        return
+                    i = i + 1
+        
     def run(self): #Metodo que se ejecutara con la llamada start
-          self.semaforo.acquire()
-          self.enviarOFertas()
-          self.semaforo.release()
+        self.socketServer =  context.socket(zmq.REQ)
+        if hostPincipal == "25.86.45.96":
+            self.socketServer.connect("tcp://25.8.248.34:6000")
+        elif hostPincipal == "25.8.248.34":
+            self.socketServer.connect("tcp://25.8.248.34:6000")
+        else :
+            self.socketServer.connect("tcp://25.86.45.96:6000")
+        self.semaforo.acquire()
+        self.enviarOFertas()
+        self.semaforo.release()
 #-----------------------------------------------------------------
 class HiloObtenerOfertas(Thread):
     # Este hilo se encarga de escuchar las tres posibles ips de empleadores
@@ -75,7 +99,27 @@ class HiloObtenerOfertas(Thread):
          self.ip = ip
          self.puerto = puerto
          self.semaforo  = semaforo
-    def insertar_oferta(self,ob):
+    def insetarClasificar(self,ob):
+        if "ingenieria"in ob.descripcion or "ingenieria"in ob.estudio:
+            ob.setSector("ingenieria")
+        elif "medico"in ob.descripcion or "medicina"in ob.estudio:
+            ob.setSector("salud")
+        elif "enfermera"in ob.descripcion or "enfermeria"in ob.estudio:
+            ob.setSector("salud")
+        elif "instrumento"in ob.descripcion or "musica"in ob.estudio:
+            ob.setSector("Musica")
+        elif "banda"in ob.descripcion or "conciertos"in ob.descripcion:
+            ob.setSector("salud")
+        elif "politica"in ob.descripcion or "derecho"in ob.estudio:
+            ob.setSector("Politica")
+        elif "civil"in ob.descripcion or "senado"in ob.descripcion:
+            ob.setSector("Politica")
+        elif "diseño"in ob.descripcion or "diseñar"in ob.descripcion:
+            ob.setSector("Arquitectura y diseño")
+        elif "dibujar"in ob.descripcion or "planos"in ob.descripcion:
+            ob.setSector("Arquitectura y diseño")
+        elif "diseño"in ob.estudio or "arquitectura"in ob.estudio:
+            ob.setSector("Arquitectura y diseño")
         listOfertas.add(ob)
         print(listOfertas)
     def run(self): #Metodo que se ejecutara con la llamada start
@@ -88,13 +132,13 @@ class HiloObtenerOfertas(Thread):
             ob = socket.recv_pyobj()
             print("llega objeto")
             self.semaforo.acquire()
-            self.insertar_oferta(ob)
+            self.insetarClasificar(ob)
             self.semaforo.release()
-            #HiloServidorEnviar(self.semaforo).start()
-            print("Se ha insertado una oferta ")
+            HiloServidorEnviar(self.semaforo).start()
             
 HiloObtenerOfertas("25.86.45.96","5000",semaforo).start()
 HiloObtenerOfertas("25.8.248.34","5000",semaforo).start()
+HiloObtenerOfertas("25.5.97.125","5000",semaforo).start()
 
 
 
