@@ -47,27 +47,29 @@ class HiloServidorEnviar(Thread):
             for i in listOfertas:
                 print("Oferta : ")
                 print(i)
-                self.socketServer.send_pyobj(i)
-                k = 0
-                end = False
-                while not end:
-                    if self.socketServer.poll(3000) and zmq.POLLIN:
+                self.guardarOferta(i,)
+                if self.socketServer.send_pyobj(i,"25.8.248.34"):
+                    continue
+                elif self.socketServer.send_pyobj(i,"25.86.45.96"):
+                    continue
+                elif self.socketServer.send_pyobj(i,"25.5.97.125"):
+                    continue
+                else:
+                    print("No hay servidores disponibles")
+                    break
+    def guardarOferta(self, oferta,ip):
+        self.socketServer.connect("tcp://"+ip+":6000")
+        self.socketServer.send_pyobj(oferta)
+        k = 0
+        end = False
+        while not end and k < 10:
+            if self.socketServer.poll(3000) and zmq.POLLIN:
                         res = self.socketServer.recv_string()
                         print(res)
                         end = True
-                    elif k == 10 and hostPincipal != "25.8.248.34":
-                        self.socketServer.connect("tcp://25.8.248.34:6000")
-                        self.socketServer.send_pyobj(i)
-                    elif k == 20 and hostPincipal != "25.86.45.96":
-                        self.socketServer.connect("tcp://25.86.45.96:6000")
-                        self.socketServer.send_pyobj(i)
-                    elif k == 30 and hostPincipal != "25.5.97.125":
-                        self.socketServer.connect("tcp://25.5.97.125:6000")
-                        self.socketServer.send_pyobj(i)
-                    elif k == 31:
-                        print("No hay servidores disponibles")
-                        return
-                    k = k + 1
+            k = k + 1
+        return end
+            
         
     def run(self): #Metodo que se ejecutara con la llamada start
         self.socketServer =  context.socket(zmq.REQ)
