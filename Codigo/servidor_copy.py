@@ -35,7 +35,7 @@ class DHTCompartir(Thread):
         socket =  context.socket(zmq.REQ)
         conexion = "tcp://"+self.ip+":"+self.puerto
         socket.connect(conexion)
-        socket.send_pyobj(DHT)
+        socket.send_json(DHT)
         respuesta = socket.recv_string()
         print(respuesta)
 class HiloAlamcenarenDHT(Thread):
@@ -83,7 +83,7 @@ def insertarOfertas():
         HiloAlamcenarenDHT(semaforo,obj).start()
 def actualizacionDHT():
     while True:
-        p = socketActulizacion.recv_pyobj()
+        p = socketActulizacion.recv_json()
         print(p)
         #fataria actualizar el archivo bd
 
