@@ -85,8 +85,19 @@ def actualizacionDHT():
     while True:
         p = socketActulizacion.recv_pyobj()
         socketActulizacion.send_string("listo")
+        semaforo.acquire()
+        DHT = p 
+        f = open("bd.txt","w")
+        for i in p:
+            object = p[i]
+            f.write(object.titulo)
+            f.write(object.descripcion)
+            f.write(object.experiencia)
+            f.write(object.estudio)
+            f.write(object.habilidades)
+        f.close()
+        semaforo.release()
         print(p)
-        #fataria actualizar el archivo bd
 
 hiloFiltro = Thread(target=insertarOfertas)
 hiloFiltro.start()
