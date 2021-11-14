@@ -178,3 +178,48 @@ hacer cirugias
 2
 meidicina
 instrumentos de cirugia, manejo de personas
+ingenierio devops 
+asisitir en la parte operativa de la empresa
+1
+ingenieria de sistemas
+c++,python,r,git,linux
+mineria de datos 
+asisitir en la parte de datos 
+2
+ingenieria de sistemas
+c++,python,r
+meidico cirujano 
+hacer cirugias 
+2
+meidicina
+instrumentos de cirugia, manejo de personas
+ingenierio devops 
+asisitir en la parte operativa de la empresa
+1
+ingenieria de sistemas
+c++,python,r,git,linux
+mineria de datos 
+asisitir en la parte de datos 
+2
+ingenieria de sistemas
+c++,python,r
+meidico cirujano 
+hacer cirugias 
+2
+meidicina
+instrumentos de cirugia, manejo de personas
+ingenierio devops 
+asisitir en la parte operativa de la empresa
+1
+ingenieria de sistemas
+c++,python,r,git,linux
+mineria de datos 
+asisitir en la parte de datos 
+2
+ingenieria de sistemas
+c++,python,r
+meidico cirujano 
+hacer cirugias 
+2
+meidicina
+instrumentos de cirugia, manejo de personas
