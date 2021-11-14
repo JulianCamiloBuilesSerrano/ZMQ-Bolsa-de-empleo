@@ -47,12 +47,11 @@ class HiloServidorEnviar(Thread):
             for i in listOfertas:
                 print("Oferta : ")
                 print(i)
-                self.guardarOferta(i,)
-                if self.socketServer.send_pyobj(i,"25.8.248.34"):
+                if self.guardarOferta(i,"25.8.248.34"):
                     continue
-                elif self.socketServer.send_pyobj(i,"25.86.45.96"):
+                elif self.guardarOferta(i,"25.86.45.96"):
                     continue
-                elif self.socketServer.send_pyobj(i,"25.5.97.125"):
+                elif self.guardarOferta(i,"25.5.97.125"):
                     continue
                 else:
                     print("No hay servidores disponibles")
