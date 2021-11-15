@@ -8,8 +8,47 @@ asisitir en la parte operativa de la empresa
 1
 ingenieria de sistemas
 c++,python,r,git,linux
+medico cirujano 
+hacer cirugias 
+2
+medicina
+instrumentos de cirugia, manejo de personas
+medico cirujano 
+hacer cirugias 
+2
+medicina
+instrumentos de cirugia, manejo de personas
+ingenierio devops 
+asisitir en la parte operativa de la empresa
+1
+ingenieria de sistemas
+c++,python,r,git,linux
 arquitecto de casas 
 diseñar muchas casas 
 3
 arquitectura
-autocad, dibujo tecnico
+autocad, dibujo tecnicoingenierio devops 
+asisitir en la parte operativa de la empresa
+1
+ingenieria de sistemas
+c++,python,r,git,linux
+ingenierio devops 
+asisitir en la parte operativa de la empresa
+1
+ingenieria de sistemas
+c++,python,r,git,linux
+mineria de datos 
+asisitir en la parte de datos 
+2
+ingenieria de sistemas
+c++,python,r
+mineria de datos 
+asisitir en la parte de datos 
+2
+ingenieria de sistemas
+c++,python,r
+medico cirujano 
+hacer cirugias 
+2
+medicina
+instrumentos de cirugia, manejo de personas

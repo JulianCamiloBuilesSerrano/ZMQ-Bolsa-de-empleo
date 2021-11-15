@@ -47,8 +47,6 @@ class HiloServidorEnviar(Thread):
     def enviarOFertas(self):
         if len(listOfertas) >= 3:
             for i in listOfertas:
-                print("Oferta : ")
-                print(i)
                 if self.guardarOferta(i,"25.8.248.34"):
                     continue
                 elif self.guardarOferta(i,"25.86.45.96"):
@@ -62,8 +60,6 @@ class HiloServidorEnviar(Thread):
         
     def guardarOferta(self, oferta,ip):
         socketServer =  context.socket(zmq.REQ)
-
-        print("ENTRA" + "tcp://"+ip+":6000")
         socketServer.connect("tcp://"+ip+":6000")
         socketServer.send_pyobj(oferta)
         k = 0
@@ -112,9 +108,7 @@ class HiloObtenerOfertas(Thread):
             ob.sector = "arquitectura y diseño"
         elif "diseño"in ob.estudio or "arquitectura"in ob.estudio:
             ob.sector ="arquitectura y diseño"
-        print(ob)
         listOfertas.add(ob)
-        print(listOfertas)
     def run(self): #Metodo que se ejecutara con la llamada start
         socket =  context.socket(zmq.SUB)
         conexion = "tcp://"+self.ip+":"+self.puerto
@@ -123,11 +117,12 @@ class HiloObtenerOfertas(Thread):
         socket.subscribe("")
         while True:
             ob = socket.recv_pyobj()
-            print("llega objeto")
             self.semaforo.acquire()
             self.insetarClasificar(ob)
             self.semaforo.release()
+            
             HiloServidorEnviar(self.semaforo).start()
+        
   
 class EnviarOFerta(Thread):
     # este hilo se encarga de estar escuchando algun filtro
@@ -144,7 +139,7 @@ class EnviarOFerta(Thread):
         while not end and k < 10:
             if socketS.poll(100) and zmq.POLLIN:
                         res = socketS.recv_string()
-                        print(res)
+                        
                         return True
             k = k + 1
         return False
@@ -152,26 +147,27 @@ class EnviarOFerta(Thread):
         socketS =  context.socket(zmq.REQ)
         socketS.connect("tcp://"+ip+":3000")
         socketS.send_string("ofertas")
-        print("pasa")
         return socketS.recv_pyobj() 
         
     def run(self): 
         self.socket = context.socket(zmq.PUB)
         self.socket.bind("tcp://{}:{}".format(hostPincipal,"1000"))
         while True:
-            time.sleep(5)
+            time.sleep(1)
             if self.servidorActivo("25.8.248.34"):
                 ofertas = self.traerOfertasServidor("25.8.248.34")
                 self.socket.send_pyobj(ofertas)
+                
                 continue
             elif self.servidorActivo("25.86.45.96"):
                 ofertas = self.traerOfertasServidor("25.86.45.96")
                 self.socket.send_pyobj(ofertas)
-                
+               
                 continue
             elif self.servidorActivo("25.5.97.125"):
                 ofertas = self.traerOfertasServidor("25.5.97.125")
                 self.socket.send_pyobj(ofertas)
+                
                 continue
             else:
                 print("No hay servidores disponibles")
@@ -184,3 +180,49 @@ EnviarOFerta().start()
 
 
 
+def servidorActivo_aux(ip):
+        socketS =  context.socket(zmq.REQ)
+        socketS.connect("tcp://"+ip+":2000")
+        socketS.send_string("activo?")
+        k = 0
+        res:str
+        end = False
+        while not end and k < 10:
+            if socketS.poll(100) and zmq.POLLIN:
+                        res = socketS.recv_string()
+                        
+                        return True
+            k = k + 1
+        return False
+def servidorActivo():
+    if servidorActivo_aux("25.86.45.96"):
+        return "25.86.45.96"
+    if servidorActivo_aux("25.8.248.34"):
+        return "25.8.248.34"
+    if servidorActivo_aux("25.5.97.125"):
+        return "25.5.97.125"
+    return "no"
+    
+def validarAcpetacionOferta():
+    while True:
+        socketAceptaciones = context.socket(zmq.REP)
+        socketAceptaciones.bind("tcp://{}:{}".format(hostPincipal,"4000"))
+        idoferta = socketAceptaciones.recv_string()
+        # se identifica cual es el primer servidor activo
+        serv = servidorActivo()
+        socketEliminar = context.socket(zmq.REQ)
+        socketEliminar.connect("tcp://{}:{}".format(serv,"4500"))
+        socketEliminar.send_string(idoferta)
+        res = socketEliminar.recv_string()
+        
+        if res != "Oferta no aceptada":
+            socketAceptaciones.send_string("Oferta aceptada")
+            socketEmpleador = context.socket(zmq.PUB)
+            socketEmpleador.bind("tcp://{}:{}".format(hostPincipal,"4900"))
+            time.sleep(1)
+            socketEmpleador.send_string(res)
+            print("se envia al empleador la aceptacion")
+        else:
+            socketAceptaciones.send_string(res)
+validar = Thread(target=validarAcpetacionOferta)
+validar.start()

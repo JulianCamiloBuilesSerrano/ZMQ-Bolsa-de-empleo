@@ -17,8 +17,7 @@ portActualizacion = "7000"
 #Creamos el contexto 
 context = zmq.Context()
 DHT = {}
-socketfilter = context.socket(zmq.REP)
-socketfilter.bind("tcp://{}:{}".format(hostPincipal,port))
+
 socketActulizacion = context.socket(zmq.REP) 
 socketActulizacion.bind("tcp://{}:{}".format(hostPincipal,portActualizacion))
 #semaforo encargado para poder hacer uso de la lista de Ofertas enviadas por los Empleadores
@@ -47,11 +46,9 @@ class HiloAlamcenarenDHT(Thread):
          self.oferta = oferta
     def alamcenarOfertas(self):
         n = len(DHT)
-        ID = n+1
         DHT[str(n)] = self.oferta
         # with open('Ofertas.pkl','wb') as output:
         #     pickle.dump(self.oferta,output,pickle.HIGHEST_PROTOCOL)
-        print(self.oferta)
         f = open("bd.txt","a")
         #f.write(self.oferta.ip)
         f.write(self.oferta.titulo)
@@ -77,10 +74,12 @@ class HiloAlamcenarenDHT(Thread):
     
 def insertarOfertas():
     while True:
+        socketfilter = context.socket(zmq.REP)
+        socketfilter.bind("tcp://{}:{}".format(hostPincipal,port))
         obj = socketfilter.recv_pyobj()
         socketfilter.send_string("Check, objeto en el servidor " +hostPincipal)
-        print("llega objeto del filtro")
         HiloAlamcenarenDHT(semaforo,obj).start()
+        
 def actualizacionDHT():
     while True:
         p = socketActulizacion.recv_pyobj()
@@ -97,7 +96,6 @@ def actualizacionDHT():
             f.write(object.habilidades)
         f.close()
         semaforo.release()
-        print(p)
 
 def informarEstado():
     socketEstado = context.socket(zmq.REP)
@@ -113,12 +111,36 @@ def enviarOfertas():
     socketEn.bind("tcp://{}:{}".format(hostPincipal,"3000"))
     while True:
         res = socketEn.recv_string()
-        print("llega")
         if  res == "ofertas":
             semaforo.acquire()
             socketEn.send_pyobj(DHT)
             semaforo.release()
 
+
+def elminarOferta():
+    socketEliminar = context.socket(zmq.REP)
+    socketEliminar.bind("tcp://{}:{}".format(hostPincipal,"4500"))
+    while True:
+        #llega el id de la oferta para luego ser elminada
+        res = socketEliminar.recv_string()
+        semaforo.acquire()
+        val = DHT.pop(res,0)
+        semaforo.release()
+        if val != 0:
+            socketEliminar.send_string(val.ip)
+            f = open("bd.txt","w")
+            for i in DHT:
+                object = DHT[i]
+                f.write(object.titulo)
+                f.write(object.descripcion)
+                f.write(object.experiencia)
+                f.write(object.estudio)
+                f.write(object.habilidades)
+            f.close()
+        else:
+            socketEliminar.send_string("Oferta no aceptada")
+        
+        
 hiloFiltro = Thread(target=insertarOfertas)
 hiloFiltro.start()
 hiloActualizar = Thread(target=actualizacionDHT)
@@ -127,3 +149,5 @@ hiloEstado = Thread(target=informarEstado)
 hiloEstado.start()
 hiloEnviar = Thread(target=enviarOfertas)
 hiloEnviar.start()
+eliminar = Thread(target=elminarOferta)
+eliminar.start()

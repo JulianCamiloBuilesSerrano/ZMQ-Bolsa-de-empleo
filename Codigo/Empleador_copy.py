@@ -58,28 +58,26 @@ while True:
         i += 1
 
 for i in lista:
-    time.sleep(2)
+    time.sleep(1)
     socketPub.send_pyobj(i)
 
-semaforo = Semaphore(1)
-class HiloFiltroSub(Thread):
+class hilosRespeustas(Thread):
     # este hilo se encarga de estar escuchando algun filtro
     # una lista de ofertas
-    def __init__(self,ip,puerto,semaforo): #Constructor de la clase
+    def __init__(self,ip,puerto): #Constructor de la clase
          Thread.__init__(self)
          self.ip = ip
          self.puerto = puerto
-         self.semaforo  = semaforo
-    def enviarOfertas(self):
-        socket = context.socket(zmq.SUB)
-        socket.connect("tcp://"+self.ip+":"+self.puerto)
-        time.sleep(2)
-        for i in lista:
-            socketPub.send_pyobj(i)
+
     def run(self): #Metodo que se ejecutara con la llamada start
-        self.semaforo.acquire()
-        self.enviarOfertas()
-        self.semaforo.release()
+        socket = context.socket(zmq.SUB)
+        socket.connect("tcp://{}:{}".format(self.ip,self.puerto))
+        socket.subscribe("")
+        while True:
+            print("enrtaa")
+            res = socket.recv_string()
+            print("una oferta fue aceptada")
         
-# HiloFiltroSub("25.8.248.34","5000",semaforo).start()   
-# HiloFiltroSub("25.86.45.96","5000",semaforo).start() 
+hilosRespeustas("25.8.248.34","4900").start()   
+hilosRespeustas("25.86.45.96","4900").start() 
+hilosRespeustas("25.5.97.125","4900").start() 
