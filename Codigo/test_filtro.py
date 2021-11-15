@@ -8,7 +8,7 @@ from Clases import  Oferta
 #--------------------------
 #leer la ip de donse se esta iniciando el proceso 
 #--------------------------
-hostPincipal = str(input("Indique la ip: "))
+hostPincipal = "25.86.45.96"
 
 portEmp = "5000"
 portServ = "6000"
@@ -152,20 +152,25 @@ class EnviarOFerta(Thread):
     def run(self): 
         self.socket = context.socket(zmq.PUB)
         self.socket.bind("tcp://{}:{}".format(hostPincipal,"1000"))
+        tiempo = time.time()
         while True:
             time.sleep(1)
             if self.servidorActivo("25.8.248.34"):
                 ofertas = self.traerOfertasServidor("25.8.248.34")
+                print("tiempo en traer ofertas: "+ tiempo -time.time())
                 self.socket.send_pyobj(ofertas)
+                
                 
                 continue
             elif self.servidorActivo("25.86.45.96"):
                 ofertas = self.traerOfertasServidor("25.86.45.96")
+                print("tiempo en traer ofertas: "+ tiempo -time.time())
                 self.socket.send_pyobj(ofertas)
                
                 continue
             elif self.servidorActivo("25.5.97.125"):
                 ofertas = self.traerOfertasServidor("25.5.97.125")
+                print("tiempo en traer ofertas: "+ tiempo -time.time())
                 self.socket.send_pyobj(ofertas)
                 
                 continue

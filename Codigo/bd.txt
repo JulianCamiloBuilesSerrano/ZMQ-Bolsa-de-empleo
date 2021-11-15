@@ -1,10 +1,10 @@
-mineria de datos 
-asisitir en la parte de datos 
-2
-ingenieria de sistemas
-c++,python,r
 medico cirujano 
 hacer cirugias 
 2
 medicina
 instrumentos de cirugia, manejo de personas
+mineria de datos 
+asisitir en la parte de datos 
+2
+ingenieria de sistemas
+c++,python,r

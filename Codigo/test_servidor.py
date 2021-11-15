@@ -10,7 +10,7 @@ import pickle
 #--------------------------
 #leer la ip de donse se esta iniciando el proceso 
 #--------------------------
-hostPincipal = str(input("Indique la ip: "))
+hostPincipal = "25.86.45.96"
 
 port = "6000"
 portActualizacion = "7000"

@@ -4,17 +4,18 @@ from zmq.sugar.poll import select
 from Clases import Oferta
 from threading import Semaphore, Thread
 import  time
+import  sys
 #puerto de escucha de solicitudes
 
-hostPincipal = str(input("Indique la ip: "))
+hostPincipal = "25.86.45.96"
 
-experiencia = str(input("Indique la experiencia de trabajo: "))
-estudio = str(input("Indique los estudios separados por comas: "))
-habilidades = str(input("Indique las habilidades separadas por comas: "))
+experiencia = "5"
+estudio = "ingenieria de sistemas"
+habilidades = "c++"
 
 
-filtro1 = str(input("indique sector 1: "))
-filtro2 = str(input("indique sector 2: "))
+filtro1 = "ingenieria"
+filtro2 = "ingenieria"
 puerto = "1000"
 context = zmq.Context()
 socketFilro = context.socket(zmq.SUB)
@@ -43,7 +44,10 @@ class HiloEnviarAceptacion(Thread):
             if self.socket.poll(100) and zmq.POLLIN:
                         res = self.socket.recv_string()
                         print("respuesta: ",end="")
+                    
                         print(res)
+                        if res == "Oferta aceptada":
+                            sys.exit()
                         end = True
             k = k + 1
         
@@ -84,7 +88,6 @@ class HiloFiltroSub(Thread):
     def listarOfertas(self,listaOfertas):
         print("---------------Nuevas ofertas--------------")
         pregunta = "0"
-        tiempo = time.time()
         for i in listaOfertas:
             if listaOfertas[i].getSector() ==filtro1:
                 print("*******oferta "+i+"*******")
@@ -93,15 +96,14 @@ class HiloFiltroSub(Thread):
                 print(listaOfertas[i].experiencia, end="")
                 print(listaOfertas[i].estudio, end="")
                 print(listaOfertas[i].habilidades, end="")
-                pregunta = str(input("acepta la oferta si(1) o no(0): "))
-                print("tiempo de respuesta: "+ str(time.time() - tiempo))
+                pregunta = "1"
             elif listaOfertas[i].getSector ==filtro2:
                 print(listaOfertas[i].titulo, end="")
                 print(listaOfertas[i].descripcion, end="")
                 print(listaOfertas[i].experiencia, end="")
                 print(listaOfertas[i].estudio, end="")
                 print(listaOfertas[i].habilidades, end="")
-                pregunta = str(input("acepta la oferta si(1) o no(0): "))
+                pregunta = "1"
             if pregunta == "1":
                 pregunta = "0"
                 if self.validar(listaOfertas[i]):

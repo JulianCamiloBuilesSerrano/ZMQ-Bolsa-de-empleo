@@ -5,7 +5,7 @@ import  time
 #--------------------------
 #leer la ip de donse se esta iniciando el proceso 
 #--------------------------
-hostPincipal = str(input("Indique la ip: "))
+hostPincipal = "25.86.45.96"
 # --------------------------------------------------
 #   Establecimiento del pueto de conexion
 # --------------------------------------------------
@@ -78,6 +78,6 @@ class hilosRespeustas(Thread):
             res = socket.recv_string()
             print("una oferta fue aceptada")
         
-hilosRespeustas("25.8.248.34","4900").start()   
-hilosRespeustas("25.86.45.96","4900").start() 
-hilosRespeustas("25.5.97.125","4900").start() 
+# hilosRespeustas("25.8.248.34","4900").start()   
+# hilosRespeustas("25.86.45.96","4900").start() 
+# hilosRespeustas("25.5.97.125","4900").start() 
