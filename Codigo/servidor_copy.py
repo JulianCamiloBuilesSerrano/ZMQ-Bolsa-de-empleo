@@ -65,11 +65,11 @@ class HiloAlamcenarenDHT(Thread):
             DHTCompartir("25.8.248.34","7000",self.semaforo).start()
             DHTCompartir("25.5.97.125","7000",self.semaforo).start()
         elif hostPincipal == "25.8.248.34":
-            DHTCompartir("25.8.248.34","7000",self.semaforo).start()
+            DHTCompartir("25.5.97.125","7000",self.semaforo).start()
             DHTCompartir("25.86.45.96","7000",self.semaforo).start()
         else:
             DHTCompartir("25.8.248.34","7000",self.semaforo).start()
-            DHTCompartir("25.8.248.34","7000",self.semaforo).start()
+            DHTCompartir("25.86.45.96","7000",self.semaforo).start()
               
     
 def insertarOfertas():
@@ -85,6 +85,7 @@ def actualizacionDHT():
         p = socketActulizacion.recv_pyobj()
         socketActulizacion.send_string("listo")
         semaforo.acquire()
+        global DHT 
         DHT = p 
         f = open("bd.txt","w")
         for i in p:
