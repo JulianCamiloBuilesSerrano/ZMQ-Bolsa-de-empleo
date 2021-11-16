@@ -159,21 +159,21 @@ class EnviarOFerta(Thread):
             if self.servidorActivo("25.8.248.34"):
                 tiempo =  time.time()
                 ofertas = self.traerOfertasServidor("25.8.248.34")
-                print("tiempo en traer ofertas: "+ str(-tiempo +time.time()))
+                
                 self.socket.send_pyobj(ofertas)
                 
                 continue
             elif self.servidorActivo("25.86.45.96"):
                 tiempo =  time.time()
                 ofertas = self.traerOfertasServidor("25.86.45.96")
-                print("tiempo en traer ofertas: "+ str(-tiempo +time.time()))
+                
                 self.socket.send_pyobj(ofertas)
                
                 continue
             elif self.servidorActivo("25.5.97.125"):
                 tiempo =  time.time()
                 ofertas = self.traerOfertasServidor("25.5.97.125")
-                print("tiempo en traer ofertas: "+ str(-tiempo +time.time()))
+                
                 self.socket.send_pyobj(ofertas)
                 
                 continue

@@ -84,7 +84,7 @@ class HiloFiltroSub(Thread):
     def listarOfertas(self,listaOfertas):
         print("---------------Nuevas ofertas--------------")
         pregunta = "0"
-        tiempo = time.time()
+       
         for i in listaOfertas:
             if listaOfertas[i].getSector() ==filtro1:
                 print("*******oferta "+i+"*******")
@@ -94,7 +94,7 @@ class HiloFiltroSub(Thread):
                 print(listaOfertas[i].estudio, end="")
                 print(listaOfertas[i].habilidades, end="")
                 pregunta = str(input("acepta la oferta si(1) o no(0): "))
-                print("tiempo de respuesta: "+ str(time.time() - tiempo))
+            
             elif listaOfertas[i].getSector ==filtro2:
                 print(listaOfertas[i].titulo, end="")
                 print(listaOfertas[i].descripcion, end="")

@@ -58,11 +58,11 @@ while True:
         i += 1
 
 for i in lista:
-    tiempoenvio = time.time()
+
     time.sleep(1)
     
     socketPub.send_pyobj(i)
-    print("tiempo de envio"+ str(time.time()-tiempoenvio))
+    
 class hilosRespeustas(Thread):
     # este hilo se encarga de estar escuchando algun filtro
     # una lista de ofertas
@@ -77,10 +77,9 @@ class hilosRespeustas(Thread):
         socket.connect("tcp://{}:{}".format(self.ip,self.puerto))
         socket.subscribe("")
         while True:
-            print("enrtaa")
             res = socket.recv_string()
-            print("una oferta fue aceptada")
-            print("tiempo de respuesta" + str(time.time() - self.tiempo) )
+            if res == hostPincipal:
+                print("una oferta fue aceptada")
         
 hilosRespeustas("25.8.248.34","4900",time.time()).start()   
 hilosRespeustas("25.86.45.96","4900",time.time()).start() 
